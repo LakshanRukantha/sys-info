@@ -16,13 +16,22 @@
     <link rel="stylesheet" href="css/global.css" />
     <title>System Info | Web Based System Information Dashboard</title>
   </head>
-  <body class="dark:bg-zinc-900">
-    <h1
-      class="mb-4 line-b text-xl md:text-4xl text-green-500 p-3 md:text-center"
-    >
-      System Info - v0.1.0
-    </h1>
-    <div>Content</div>
+  <body>
+    <main class="p-4 bg-slate-800 min-h-screen">
+      <pre
+        class="leading-[8px] text-[0.6rem] sm:text-xs sm:leading-3 line-b pb-3 text-green-500"
+      >
+███████╗██╗   ██╗███████╗██╗███╗   ██╗███████╗ ██████╗ 
+██╔════╝╚██╗ ██╔╝██╔════╝██║████╗  ██║██╔════╝██╔═══██╗
+███████╗ ╚████╔╝ ███████╗██║██╔██╗ ██║█████╗  ██║   ██║
+╚════██║  ╚██╔╝  ╚════██║██║██║╚██╗██║██╔══╝  ██║   ██║
+███████║   ██║   ███████║██║██║ ╚████║██║     ╚██████╔╝ <span class="text-red-500">(v1.0.0)</span>
+╚══════╝   ╚═╝   ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝      ╚═════╝ 
+</pre>
+      <div class="text-red-500 mt-2">
+        #root$ <span class="text-slate-50">Main content goes here...</span>
+      </div>
+    </main>
     <script src="js/main.js"></script>
   </body>
 </html>
