@@ -29,6 +29,13 @@ document.addEventListener("DOMContentLoaded", function () {
     if (event.key === "Enter") {
       event.preventDefault();
       const commandInput = event.target;
+
+      // Remove the input field and replace with span for preventing further input
+      const commandSpan = document.createElement("span");
+      commandSpan.className = "text-slate-50 text-sm md:text-base";
+      commandSpan.textContent = commandInput.value;
+      commandInput.replaceWith(commandSpan);
+
       const command = commandInput.value.trim().toLowerCase();
 
       // Create a new output element
