@@ -30,3 +30,7 @@
 .line-y {
   @apply border-y-2 border-dashed dark:border-green-500;
 }
+
+.typed-cursor {
+  @apply text-slate-50;
+}

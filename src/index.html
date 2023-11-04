@@ -10,11 +10,13 @@
     />
     <meta
       name="keywords"
-      content="System Info, Device Info, Battery, Network"
+      content="SysInfo, Info, Device Info, Battery, Network"
     />
+    <!-- favicon -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <meta name="robots" content="index, follow" />
     <link rel="stylesheet" href="css/global.css" />
-    <title>System Info | Web Based System Information Dashboard</title>
+    <title>SysInfo | Web Based System Information Dashboard</title>
   </head>
   <body>
     <main class="p-4 bg-slate-800 min-h-screen">
@@ -28,10 +30,31 @@
 ███████║   ██║   ███████║██║██║ ╚████║██║     ╚██████╔╝ <span class="text-red-500">(v1.0.0)</span>
 ╚══════╝   ╚═╝   ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝      ╚═════╝ 
 </pre>
-      <div class="text-red-500 mt-2">
-        #root$ <span class="text-slate-50">Main content goes here...</span>
+      <div class="my-2 line-b pb-2 text-sm md:text-base">
+        <span class="text-red-500">sysinfo:~$</span>
+        <span id="dynamic-status" class="text-slate-50"></span>
+      </div>
+      <div id="terminal">
+        <!-- Command input and output will be re-rendered here -->
       </div>
     </main>
+    <!-- Main JS File -->
     <script src="js/main.js"></script>
+    <!-- Typed JS -->
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+    <script>
+      const typed = new Typed("#dynamic-status", {
+        strings: [
+          "sysinfo: For system info",
+          "battery: For battery info",
+          "network: For network info",
+          "help: For more information",
+          "clear: To clear the screen",
+        ],
+        typeSpeed: 50,
+        backSpeed: 10,
+        loop: true,
+      });
+    </script>
   </body>
 </html>
