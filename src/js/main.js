@@ -5,8 +5,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const createCommandElement = () => {
     const commandInput = document.createElement("div");
     commandInput.innerHTML = `
-        <div class="flex text-sm md:text-base gap-2 mt-1">
-        <span class="text-red-500">sysinfo:~$</span>
+        <div class="flex text-sm md:text-base gap-2 my-2">
+        <span class="text-red-500"
+          >sysinfo:~<span class="text-green-500">$</span></span
+        >
         <input
           type="text"
           id="command"
@@ -19,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Focus on the input field
     const inputField = commandInput.querySelector("#command");
     inputField.focus();
-    inputField.addEventListener("keyup", handleCommand);
+    inputField.addEventListener("keydown", handleCommand);
   };
 
   // Handle command input
@@ -32,11 +34,14 @@ document.addEventListener("DOMContentLoaded", function () {
       // Create a new output element
       const outputElement = document.createElement("span");
       outputElement.className =
-        "text-slate-50 text-sm md:text-base mt-2 whitespace-break-spaces";
+        "text-slate-50 text-sm md:text-base whitespace-break-spaces";
       terminal.appendChild(outputElement);
 
       // Handle different commands and update outputElement accordingly
       switch (command) {
+        case "": // Empty command input
+          createCommandElement();
+          break;
         case "help":
           outputElement.textContent += "Available commands:\n";
           outputElement.textContent +=

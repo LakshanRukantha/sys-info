@@ -543,10 +543,6 @@ video {
   margin-top: 0.5rem;
 }
 
-.mt-1 {
-  margin-top: 0.25rem;
-}
-
 .flex {
   display: flex;
 }
@@ -559,24 +555,12 @@ video {
   width: 100%;
 }
 
-.flex-col {
-  flex-direction: column;
-}
-
 .gap-2 {
   gap: 0.5rem;
 }
 
-.whitespace-pre-wrap {
-  white-space: pre-wrap;
-}
-
 .whitespace-break-spaces {
   white-space: break-spaces;
-}
-
-.break-words {
-  overflow-wrap: break-word;
 }
 
 .border-none {
@@ -712,10 +696,5 @@ video {
   .md\:text-base {
     font-size: 1rem;
     line-height: 1.5rem;
-  }
-
-  .md\:text-sm {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
   }
 }
