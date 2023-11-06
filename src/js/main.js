@@ -24,6 +24,29 @@ document.addEventListener("DOMContentLoaded", function () {
     inputField.addEventListener("keydown", handleCommand);
   };
 
+  // Battery command handler
+  const batteryHandler = async (outElement) => {
+    navigator.getBattery().then((battery) => {
+      outElement.textContent = `=#= Battery Stats =#=\n\n`; // Clear the output element
+      outElement.textContent += `Battery Level: ${
+        battery.level > 0.5 ? "🔋" : "🪫"
+      }${battery.level * 100}% ${battery.level <= 0.2 && "(Low battery)"}\n`;
+      outElement.textContent += `Battery Status: ${
+        battery.charging ? "⚡Charging" : "🔌Not Charging"
+      }\n`;
+      outElement.textContent += `Battery Charging Time: ${
+        battery.chargingTime !== Infinity
+          ? `${battery.chargingTime} seconds`
+          : "😢 Couldn't calculate"
+      }\n`;
+      outElement.textContent += `Battery Discharging Time: ${
+        battery.chargingTime !== Infinity
+          ? `${battery.chargingTime} seconds`
+          : "😢 Couldn't calculate"
+      }\n`;
+    });
+  };
+
   // Handle command input
   const handleCommand = (event) => {
     if (event.key === "Enter") {
@@ -70,7 +93,10 @@ document.addEventListener("DOMContentLoaded", function () {
         case "battery":
           outputElement.textContent += "Fetching battery information...\n";
           // Get and display battery information here
-          createCommandElement();
+          setTimeout(async () => {
+            await batteryHandler(outputElement);
+            createCommandElement();
+          }, 500);
           break;
 
         case "network":
