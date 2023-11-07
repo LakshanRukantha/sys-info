@@ -49,6 +49,22 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   };
 
+  // Network command handler
+  const networkHandler = async (outElement) => {
+    const connection =
+      (await navigator.connection) ||
+      (await navigator.mozConnection) ||
+      (await navigator.webkitConnection);
+
+    outElement.textContent = `=#= Network Stats =#=\n\n`; // Clear the output element
+    outElement.textContent += `Connection Type: ${connection.effectiveType}\n`;
+    outElement.textContent += `Effective Bandwidth: ${connection.downlink} Mbps\n`;
+    outElement.textContent += `Data Saver: ${
+      connection.saveData ? "Active" : "Inactive"
+    }\n`;
+    outElement.textContent += `Round-trip Time: ${connection.rtt} ms\n`;
+  };
+
   // Handle command input
   const handleCommand = (event) => {
     if (event.key === "Enter") {
@@ -103,8 +119,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         case "network":
           outputElement.textContent += "Fetching network information...\n";
+          // console.log(navigator.connection);
           // Get and display network information here
-          createCommandElement();
+          setTimeout(async () => {
+            await networkHandler(outputElement);
+            createCommandElement();
+          }, 500);
           break;
 
         case "clear":
