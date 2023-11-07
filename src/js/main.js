@@ -29,10 +29,12 @@ document.addEventListener("DOMContentLoaded", function () {
     navigator.getBattery().then((battery) => {
       outElement.textContent = `=#= Battery Stats =#=\n\n`; // Clear the output element
       outElement.textContent += `Battery Level: ${
-        battery.level > 0.5 ? "🔋" : "🪫"
-      }${battery.level * 100}% ${battery.level <= 0.2 && "(Low battery)"}\n`;
+        battery.level > 0.5 ? "🔋 " : "🪫 "
+      }${battery.level * 100}% ${
+        battery.level <= 0.2 ? "(Low battery)" : ""
+      }\n`;
       outElement.textContent += `Battery Status: ${
-        battery.charging ? "⚡Charging" : "🔌Not Charging"
+        battery.charging ? "⚡ Charging" : "🔌 Not Charging"
       }\n`;
       outElement.textContent += `Battery Charging Time: ${
         battery.chargingTime !== Infinity
