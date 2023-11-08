@@ -93,12 +93,15 @@ document.addEventListener("DOMContentLoaded", function () {
         case "help":
           outputElement.textContent += "Available commands:\n";
           outputElement.textContent +=
-            "  sysinfo: Displays system information\n";
+            "- sysinfo: Displays system information\n";
           outputElement.textContent +=
-            "  battery: Displays battery information\n";
+            "- battery: Displays battery information\n";
           outputElement.textContent +=
-            "  network: Displays network information\n";
-          outputElement.textContent += "  clear: Clears the terminal\n";
+            "- network: Displays network information\n";
+          // weather
+          outputElement.textContent +=
+            "- weather <location>: Displays weather information\n";
+          outputElement.textContent += "- clear: Clears the terminal\n";
 
           createCommandElement(); // Re-render the terminal
           break;
@@ -125,6 +128,12 @@ document.addEventListener("DOMContentLoaded", function () {
             await networkHandler(outputElement);
             createCommandElement();
           }, 500);
+          break;
+
+        case "weather":
+          outputElement.textContent += "Fetching weather information...\n";
+          // Get and display weather information here
+          createCommandElement();
           break;
 
         case "clear":
