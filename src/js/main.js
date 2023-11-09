@@ -65,6 +65,93 @@ document.addEventListener("DOMContentLoaded", function () {
     outElement.textContent += `Round-trip Time: ${connection.rtt} ms\n`;
   };
 
+  // Weather command handler
+  const weatherHandler = async (props) => {
+    const location = await props.location;
+    const outElement = await props.outputElement;
+    // get location from input command
+    const url = `https://rapidweather.p.rapidapi.com/data/2.5/weather?q=${location}`;
+    const options = {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Key": "135d822d36mshb2297f486170e36p1233a7jsne715a69bf7ac",
+        "X-RapidAPI-Host": "rapidweather.p.rapidapi.com",
+      },
+    };
+
+    // get weather icon
+    const getWeatherIcon = (weather) => {
+      switch (weather) {
+        case "Clear":
+          return "☀️";
+        case "Clouds":
+          return "☁️";
+        case "Rain":
+          return "🌧️";
+        case "Snow":
+          return "❄️";
+        case "Mist":
+          return "🌫️";
+        case "Thunderstorm":
+          return "⛈️";
+        case "Drizzle":
+          return "🌦️";
+        case "Haze":
+          return "🌫️";
+        case "Fog":
+          return "🌫️";
+        case "Smoke":
+          return "🌫️";
+        case "Sand":
+          return "🌫️";
+        case "Dust":
+          return "🌫️";
+        case "Ash":
+          return "🌫️";
+        case "Squall":
+          return "🌫️";
+        case "Tornado":
+          return "🌪️";
+        default:
+          return "🌫️";
+      }
+    };
+
+    // fahrenheit to celsius
+    const fahrenheitToCelsius = (fahrenheit) => {
+      return ((fahrenheit - 32) * 5) / 9;
+    };
+
+    try {
+      const response = await fetch(url, options);
+      const result = await response.json();
+      console.log(result);
+      outElement.textContent = `=#= Weather Stats (${result.name}) =#=\n\n`; // Clear the output element
+      outElement.textContent += `Current Weather: ${
+        result.weather[0].main
+      } ${getWeatherIcon(result.weather[0].main)}\n`;
+      outElement.textContent += `Temperature: ${Math.round(
+        fahrenheitToCelsius(result.main.temp)
+      )} °C (${Math.round(result.main.temp)} °F)\n`;
+      outElement.textContent += `Feels Like: ${Math.round(
+        fahrenheitToCelsius(result.main.feels_like)
+      )} °C (${Math.round(result.main.feels_like)} °F)\n`;
+      outElement.textContent += `Min Temperature: ${Math.round(
+        fahrenheitToCelsius(result.main.temp_min)
+      )} °C (${Math.round(result.main.temp_min)} °F)\n`;
+      outElement.textContent += `Max Temperature: ${Math.round(
+        fahrenheitToCelsius(result.main.temp_max)
+      )} °C (${Math.round(result.main.temp_max)} °F)\n`;
+      outElement.textContent += `Pressure: ${result.main.pressure} hPa\n`;
+      outElement.textContent += `Humidity: ${result.main.humidity} %\n`;
+      outElement.textContent += `Visibility: ${result.visibility} m\n`;
+      outElement.textContent += `Wind Speed: ${result.wind.speed} m/s\n`;
+      outElement.textContent += `Wind Direction: ${result.wind.deg}°\n`;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // Handle command input
   const handleCommand = (event) => {
     if (event.key === "Enter") {
@@ -77,7 +164,8 @@ document.addEventListener("DOMContentLoaded", function () {
       commandSpan.textContent = commandInput.value;
       commandInput.replaceWith(commandSpan);
 
-      const command = commandInput.value.trim().toLowerCase();
+      const userInput = commandInput.value.trim().toLowerCase();
+      const command = userInput.split(" ")[0];
 
       // Create a new output element
       const outputElement = document.createElement("span");
@@ -122,7 +210,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         case "network":
           outputElement.textContent += "Fetching network information...\n";
-          // console.log(navigator.connection);
           // Get and display network information here
           setTimeout(async () => {
             await networkHandler(outputElement);
@@ -130,10 +217,19 @@ document.addEventListener("DOMContentLoaded", function () {
           }, 500);
           break;
 
+        // this case can be dynamic and catch all the commands that start with weather and command can be (weather london or weather sri lanka or like that)
         case "weather":
           outputElement.textContent += "Fetching weather information...\n";
           // Get and display weather information here
-          createCommandElement();
+          setTimeout(async () => {
+            // take location as rest after weather
+            const location = userInput.split(" ").slice(1).join(" ");
+            await weatherHandler({
+              location: location,
+              outputElement: outputElement,
+            });
+            createCommandElement();
+          }, 500);
           break;
 
         case "clear":
