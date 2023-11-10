@@ -133,16 +133,16 @@ document.addEventListener("DOMContentLoaded", function () {
       } ${getWeatherIcon(result.weather[0].main)}\n`;
       outElement.textContent += `Temperature: ${fahrenheitToCelsius(
         result.main.temp
-      )}°C ${Math.round(result.main.temp)}°F\n`;
+      )}°C/${Math.round(result.main.temp)}°F\n`;
       outElement.textContent += `Feels Like: ${fahrenheitToCelsius(
         result.main.feels_like
-      )}°C ${Math.round(result.main.feels_like)}°F\n`;
+      )}°C/${Math.round(result.main.feels_like)}°F\n`;
       outElement.textContent += `Min Temperature: ${fahrenheitToCelsius(
         result.main.temp_min
-      )}°C ${Math.round(result.main.temp_min)}°F\n`;
+      )}°C/${Math.round(result.main.temp_min)}°F\n`;
       outElement.textContent += `Max Temperature: ${fahrenheitToCelsius(
         result.main.temp_max
-      )}°C ${Math.round(result.main.temp_max)}°F\n`;
+      )}°C/${Math.round(result.main.temp_max)}°F\n`;
       outElement.textContent += `Pressure: ${result.main.pressure} hPa\n`;
       outElement.textContent += `Humidity: ${result.main.humidity} %\n`;
       outElement.textContent += `Visibility: ${result.visibility} m\n`;
