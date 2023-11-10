@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
           type="text"
           id="command"
           class="bg-transparent text-slate-50 outline-none border-none w-full"
+          autocomplete="false"
           aria-label="command"
         />
         </div>`;
@@ -70,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const location = await props.location;
     const outElement = await props.outputElement;
     // get location from input command
-    const url = `https://rapidweather.p.rapidapi.com/data/2.5/weather?q=${location}`;
+    const url = `https://rapidweather.p.rapidapi.com/data/2.5/weather?q=${location}&metric=true&units=imperial&lang=en`;
     const options = {
       method: "GET",
       headers: {
@@ -119,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // fahrenheit to celsius
     const fahrenheitToCelsius = (fahrenheit) => {
-      return ((fahrenheit - 32) * 5) / 9;
+      return Math.round(((fahrenheit - 32) * 5) / 9);
     };
 
     try {
@@ -130,24 +131,25 @@ document.addEventListener("DOMContentLoaded", function () {
       outElement.textContent += `Current Weather: ${
         result.weather[0].main
       } ${getWeatherIcon(result.weather[0].main)}\n`;
-      outElement.textContent += `Temperature: ${Math.round(
-        fahrenheitToCelsius(result.main.temp)
-      )} °C (${Math.round(result.main.temp)} °F)\n`;
-      outElement.textContent += `Feels Like: ${Math.round(
-        fahrenheitToCelsius(result.main.feels_like)
-      )} °C (${Math.round(result.main.feels_like)} °F)\n`;
-      outElement.textContent += `Min Temperature: ${Math.round(
-        fahrenheitToCelsius(result.main.temp_min)
-      )} °C (${Math.round(result.main.temp_min)} °F)\n`;
-      outElement.textContent += `Max Temperature: ${Math.round(
-        fahrenheitToCelsius(result.main.temp_max)
-      )} °C (${Math.round(result.main.temp_max)} °F)\n`;
+      outElement.textContent += `Temperature: ${fahrenheitToCelsius(
+        result.main.temp
+      )}°C ${Math.round(result.main.temp)}°F\n`;
+      outElement.textContent += `Feels Like: ${fahrenheitToCelsius(
+        result.main.feels_like
+      )}°C ${Math.round(result.main.feels_like)}°F\n`;
+      outElement.textContent += `Min Temperature: ${fahrenheitToCelsius(
+        result.main.temp_min
+      )}°C ${Math.round(result.main.temp_min)}°F\n`;
+      outElement.textContent += `Max Temperature: ${fahrenheitToCelsius(
+        result.main.temp_max
+      )}°C ${Math.round(result.main.temp_max)}°F\n`;
       outElement.textContent += `Pressure: ${result.main.pressure} hPa\n`;
       outElement.textContent += `Humidity: ${result.main.humidity} %\n`;
       outElement.textContent += `Visibility: ${result.visibility} m\n`;
       outElement.textContent += `Wind Speed: ${result.wind.speed} m/s\n`;
       outElement.textContent += `Wind Direction: ${result.wind.deg}°\n`;
     } catch (error) {
+      outElement.textContent = "❌ Couldn't fetch weather information\n";
       console.error(error);
     }
   };
