@@ -154,6 +154,45 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
+  // domain to ip lookup
+  const domainHandler = async (props) => {
+    const domain = await props.domain;
+    const outElement = await props.outputElement;
+    // get location from input command
+    const url = `https://dns.google/resolve?name=${domain}`;
+    const options = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    };
+
+    // get all ips
+    const getAllIPs = (data) => {
+      const ips = [];
+      data.forEach((element) => {
+        ips.push(element.data);
+      });
+      return ips;
+    };
+
+    try {
+      const response = await fetch(url, options);
+      const result = await response.json();
+      console.log(result);
+      outElement.textContent = `=#= Domain Stats (${result.Answer[0].name}) =#=\n\n`; // Clear the output element
+      outElement.textContent += `Domain: ${result.Answer[0].name}\n`;
+      outElement.textContent += `Type: ${result.Answer[0].type}\n`;
+      outElement.textContent += `TTL: ${result.Answer[0].TTL}\n`;
+      outElement.textContent += `IP(s): ${getAllIPs(result.Answer).join(
+        ", "
+      )}\n`;
+    } catch (error) {
+      outElement.textContent = "❌ Couldn't fetch domain information\n";
+      console.error(error);
+    }
+  };
+
   // Handle command input
   const handleCommand = (event) => {
     if (event.key === "Enter") {
@@ -191,6 +230,9 @@ document.addEventListener("DOMContentLoaded", function () {
           // weather
           outputElement.textContent +=
             "- weather <location>: Displays weather information\n";
+          // domain
+          outputElement.textContent +=
+            "- domain <domain>: Displays domain information\n";
           outputElement.textContent += "- clear: Clears the terminal\n";
 
           createCommandElement(); // Re-render the terminal
@@ -228,6 +270,21 @@ document.addEventListener("DOMContentLoaded", function () {
             const location = userInput.split(" ").slice(1).join(" ");
             await weatherHandler({
               location: location,
+              outputElement: outputElement,
+            });
+            createCommandElement();
+          }, 500);
+          break;
+
+        // domain to ip lookup
+        case "domain":
+          outputElement.textContent += "Fetching domain information...\n";
+          // Get and display weather information here
+          setTimeout(async () => {
+            // take location as rest after weather
+            const domain = userInput.split(" ").slice(1).join(" ");
+            await domainHandler({
+              domain: domain,
               outputElement: outputElement,
             });
             createCommandElement();
