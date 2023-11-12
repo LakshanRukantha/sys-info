@@ -154,12 +154,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  // domain to ip lookup
-  const domainHandler = async (props) => {
+  // get DNS records of a domain
+  const domainDNSHandler = async (props) => {
     const domain = await props.domain;
     const outElement = await props.outputElement;
-    // get location from input command
-    const url = `https://dns.google/resolve?name=${domain}`;
+    // get DNS info
+    const url = `https://dns.google/resolve?name=${domain}&type=A`;
     const options = {
       method: "GET",
       headers: {
@@ -167,26 +167,42 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     };
 
-    // get all ips
-    const getAllIPs = (data) => {
-      const ips = [];
+    // get all DNS records
+    const getDNSRecords = (data) => {
+      const records = [];
       data.forEach((element) => {
-        ips.push(element.data);
+        records.push(element.data);
       });
-      return ips;
+      return records;
     };
 
     try {
       const response = await fetch(url, options);
       const result = await response.json();
       console.log(result);
-      outElement.textContent = `=#= Domain Stats (${result.Answer[0].name}) =#=\n\n`; // Clear the output element
-      outElement.textContent += `Domain: ${result.Answer[0].name}\n`;
-      outElement.textContent += `Type: ${result.Answer[0].type}\n`;
-      outElement.textContent += `TTL: ${result.Answer[0].TTL}\n`;
-      outElement.textContent += `IP(s): ${getAllIPs(result.Answer).join(
-        ", "
-      )}\n`;
+      // dns record
+      outElement.textContent = `=#= DNS Record Stats (${domain}) =#=\n\n`;
+
+      const answer =
+        result.Answer && result.Answer.length > 0 ? result.Answer[0] : null;
+      const authority =
+        result.Authority && result.Authority.length > 0
+          ? result.Authority[0]
+          : null;
+
+      outElement.textContent += `DNS Type: ${
+        answer ? answer.type : authority ? authority.type : "N/A"
+      }\n`;
+      outElement.textContent += `DNS TTL: ${
+        answer ? answer.TTL : authority ? authority.TTL : "N/A"
+      }\n`;
+      outElement.textContent += `DNS Records: ${
+        answer
+          ? getDNSRecords(result.Answer).join(", ")
+          : authority
+          ? getDNSRecords(result.Authority).join(", ")
+          : "N/A"
+      }\n`;
     } catch (error) {
       outElement.textContent = "❌ Couldn't fetch domain information\n";
       console.error(error);
@@ -232,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
             "- weather <location>: Displays weather information\n";
           // domain
           outputElement.textContent +=
-            "- domain <domain>: Displays domain information\n";
+            "- dns <domain>: Displays DNS information\n";
           outputElement.textContent += "- clear: Clears the terminal\n";
 
           createCommandElement(); // Re-render the terminal
@@ -277,13 +293,13 @@ document.addEventListener("DOMContentLoaded", function () {
           break;
 
         // domain to ip lookup
-        case "domain":
-          outputElement.textContent += "Fetching domain information...\n";
-          // Get and display weather information here
+        case "dns":
+          outputElement.textContent += "Fetching DNS information...\n";
+          // Get and display dns information here
           setTimeout(async () => {
-            // take location as rest after weather
+            // take domain as rest after command
             const domain = userInput.split(" ").slice(1).join(" ");
-            await domainHandler({
+            await domainDNSHandler({
               domain: domain,
               outputElement: outputElement,
             });
