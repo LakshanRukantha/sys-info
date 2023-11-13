@@ -154,6 +154,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
+  const getDomainInfo = async (props) => {
+    const domain = await props.domain;
+    const outElement = await props.outputElement;
+  };
+
   // get DNS records of a domain
   const domainDNSHandler = async (props) => {
     const domain = await props.domain;
@@ -292,7 +297,22 @@ document.addEventListener("DOMContentLoaded", function () {
           }, 500);
           break;
 
-        // domain to ip lookup
+        // domain info lookup
+        case "domain":
+          outputElement.textContent += "Fetching domain information...\n";
+          // Get and display domain information here
+          setTimeout(async () => {
+            // take domain as rest after command
+            const domain = userInput.split(" ").slice(1).join(" ");
+            await getDomainInfo({
+              domain: domain,
+              outputElement: outputElement,
+            });
+            createCommandElement();
+          }, 500);
+          break;
+
+        // dns lookup
         case "dns":
           outputElement.textContent += "Fetching DNS information...\n";
           // Get and display dns information here
